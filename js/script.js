@@ -80,8 +80,7 @@ function generateModal (user,userIndex,arr) {
     const prev = getById("modal-prev");
 
     next.addEventListener('click',() => {
-        console.log(userIndex)
-        console.log(arr.length)
+
         if (userIndex < arr.length - 1) {
 
             userIndex += 1
@@ -157,7 +156,6 @@ function searchFn (search,users) {
            filteredUsers.push(user);
         }
     }
-
     return filteredUsers;
 }
  
@@ -168,7 +166,6 @@ function searchControl (query,users) {
 
         gallery.innerHTML = "";
         usersArr.forEach(user => generateCard(user))
-
         return
     }
  
@@ -178,17 +175,19 @@ function searchControl (query,users) {
         //CLEAN THE CURRENT LIST OF USERS TO INSERT A NOT FOUND MESSAGE.
         gallery.innerHTML = "";
         gallery.textContent = "No matches were found :(";
-
         return
     }
+
     gallery.innerHTML = ""
     users.forEach(user => generateCard(user))
 }
 
 search.addEventListener("keyup",() => {
+
     const filteredUsers = searchFn(search.value,usersArr)
     searchControl(search.value,filteredUsers)
     appendListeners(filteredUsers)
+    
 });
 
 
