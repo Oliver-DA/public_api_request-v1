@@ -161,10 +161,9 @@ function searchFn (search,users) {
     return filteredUsers;
 }
  
- //Controls the search's bar behaviour query(String) users(Filtered Array of users).
 function searchControl (query,users) {
 
-    //if no input provided to search for students return the main page.
+    //IF NO INPUT PROVIDED TO SEARCH FOR USERS,RETURN FETCHED USERS.
     if (query.length == 0 ) {
 
         gallery.innerHTML = "";
@@ -173,12 +172,13 @@ function searchControl (query,users) {
         return
     }
  
-    //if the input provided did not match any filtered students.
+    //IF THE INPUT PROVIDED DIT NOT MATCH ANY FILTERED USERS.
     else if (users.length == 0) {
     
         //CLEAN THE CURRENT LIST OF USERS TO INSERT A NOT FOUND MESSAGE.
         gallery.innerHTML = "";
         gallery.textContent = "No matches were found :(";
+
         return
     }
     gallery.innerHTML = ""
