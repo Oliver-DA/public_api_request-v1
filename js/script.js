@@ -10,8 +10,8 @@ function query  (element) {
 //CONSTANS
 const url = 'https://randomuser.me/api/?results=12&nat=us';
 const gallery = getById("gallery");
-const searchContainer = query(".search-container")
-const usersArr = []
+const searchContainer = query(".search-container");
+const usersArr = [];
 
 //GENERATES THE SEARCH BAR AND INSERTS IT INTO IT'S CONTAINER
 function generateSearch () {
@@ -44,8 +44,9 @@ function generateCard (user) {
 }
 
 //GENERATES A MODAL WHEN CALLED AND CONTROL IT'S BEHAVIOUR
-//userIndex ARGUMENT IS USED TO KEPP TRACK OF THE CURRENT USER THAT IS DISPLAYED ON THE MODAL
-function generateModal (user,userIndex) {
+//userIndex AND arr ARGUMENTS ARE USED TO KEPP TRACK OF THE CURRENT USER OR USERS THAT IS DISPLAYED ON THE MODAL
+function generateModal (user,userIndex,arr) {
+
     const date = new Date(user.dob.date)
 
     const userModal = 
@@ -80,26 +81,23 @@ function generateModal (user,userIndex) {
 
     next.addEventListener('click',() => {
         console.log(userIndex)
-
-        if (userIndex < usersArr.length - 1) {
+        console.log(arr.length)
+        if (userIndex < arr.length - 1) {
 
             userIndex += 1
             currentModal.remove()
-            generateModal(usersArr[userIndex],userIndex)
+            generateModal(arr[userIndex],userIndex,arr)
 
         }
-
-
-
     })
 
     prev.addEventListener('click',() => {
 
-        if (userIndex > 0 && userIndex < usersArr.length) {
+        if (userIndex > 0 && userIndex < arr.length) {
 
             userIndex -= 1
             currentModal.remove()
-            generateModal(usersArr[userIndex],userIndex)
+            generateModal(arr[userIndex],userIndex,arr)
         }
     })
 
@@ -125,7 +123,7 @@ generateSearch()
 
 //APPEND AN EVENT LISTENER TO EVERY USER CARD ON THE PAGE
 //AND GENERATES A MODAL WHEN ANY IS CLICKED
-function appendListeners () {
+function appendListeners (users) {
 
     const usersCards = document.querySelectorAll(".card");
 
@@ -133,51 +131,66 @@ function appendListeners () {
 
         usersCards[i].addEventListener("click", () => {
 
-            generateModal(usersArr[i],i)
-        
+            if (users) {
+
+                generateModal(users[i],i,users);
+                return 
+            }
+
+            generateModal(usersArr[i],i,usersArr)
         })
     }
 }
 
+//SEARCH FUNCTIONALITY
+const search = getById("search-input");
 
+function searchFn (search,users) {
 
+    const filteredUsers = [];
+ 
+    for ( let user of users) {
 
-// function searchFn (search,data) {
-//     const newData = [];
- 
-//     for ( let student of data) {
-//        let studentName = student.name.first.toLowerCase()+" "+ student.name.last.toLowerCase();
- 
-//        if ( search.length > 0 && studentName.includes( search.toLowerCase().trim("") ) ) {
-//           newData.push(student);
-//        }
-//     }
- 
-//     return newData;
-//  }
- 
-//  //Controls the search's bar behaviour quer(String) students(Filtered Array of students).
-//  function searchControl (query,students) {
- 
-//     //if no input provided to search for students return the main page.
-//     if (query.length == 0 ) {
-//        showPage(data,1);
-//        addPagination(data);
-//        return
-//     }
- 
-//     //if the input provided did not match any filtered students.
-//     else if (students.length == 0) {
- 
-//        //clean the current list of students and paginationButtons to insert a NOT FOUND message.
-//        cleanHtml(paginationLinks);
-//        cleanHtml(studentList);
-//        studentList.textContent = "No matches were found :(";
+       let userFullName = user.name.first.toLowerCase()+" "+ user.name.last.toLowerCase();
        
-//        return
-//     }
+       if ( search.length > 0 && userFullName.includes( search.toLowerCase().trim("") ) ) {
+           filteredUsers.push(user);
+        }
+    }
 
-//  }
+    return filteredUsers;
+}
+ 
+ //Controls the search's bar behaviour query(String) users(Filtered Array of users).
+function searchControl (query,users) {
+
+    //if no input provided to search for students return the main page.
+    if (query.length == 0 ) {
+
+        gallery.innerHTML = "";
+        usersArr.forEach(user => generateCard(user))
+
+        return
+    }
+ 
+    //if the input provided did not match any filtered students.
+    else if (users.length == 0) {
+    
+        //CLEAN THE CURRENT LIST OF USERS TO INSERT A NOT FOUND MESSAGE.
+        gallery.innerHTML = "";
+        gallery.textContent = "No matches were found :(";
+        return
+    }
+    gallery.innerHTML = ""
+    users.forEach(user => generateCard(user))
+}
+
+search.addEventListener("keyup",() => {
+    const filteredUsers = searchFn(search.value,usersArr)
+    searchControl(search.value,filteredUsers)
+    appendListeners(filteredUsers)
+});
+
 
 
 
