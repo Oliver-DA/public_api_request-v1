@@ -62,8 +62,8 @@ function generateModal (user,userIndex,arr) {
         </div>
 
         <div class="modal-btn-container">
-            <button type="button" id="modal-prev" class="modal-prev btn"><< Prev</button>
-            <button type="button" id="modal-next" class="modal-next btn">Next >></button>
+            <button type="button" id="modal-prev" class="modal-prev btn">Prev</button>
+            <button type="button" id="modal-next" class="modal-next btn">Next</button>
         </div>
     </div>`
     
@@ -73,6 +73,8 @@ function generateModal (user,userIndex,arr) {
     const closeModal = getById("modal-close-btn");
     const next = getById("modal-next");
     const prev = getById("modal-prev");
+
+    next.style.display = userIndex === arr.length - 1 ? "none":"block"
 
     next.addEventListener('click',() => {
 
@@ -84,6 +86,8 @@ function generateModal (user,userIndex,arr) {
 
         }
     })
+
+    prev.style.display = userIndex === 0 ? "none":"block"
 
     prev.addEventListener('click',() => {
 
