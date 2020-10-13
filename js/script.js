@@ -1,11 +1,6 @@
 //HELPER FUNCITONS
-function getById (id) {
-    return document.getElementById(id)
-}
-
-function query  (element) {
-    return document.querySelector(element)
-}
+const getById = id => document.getElementById(id)
+const query = element => document.querySelector(element)
 
 //CONSTANS
 const url = 'https://randomuser.me/api/?results=12&nat=us';
@@ -62,13 +57,13 @@ function generateModal (user,userIndex,arr) {
                 <hr>
                 <p class="modal-text">${user.cell}</p>
                 <p class="modal-text">${user.location.street.number}, ${user.location.street.name}, ${user.location.country}, ${user.location.postcode}</p>
-                <p class="modal-text">Birthday:${date.getMonth()+1}/${date.getDate()}/${date.getFullYear()}</p>
+                <p class="modal-text">Birthday: ${date.getMonth()+1}/${date.getDate()}/${date.getFullYear()}</p>
             </div>
         </div>
 
         <div class="modal-btn-container">
-            <button type="button" id="modal-prev" class="modal-prev btn">Prev</button>
-            <button type="button" id="modal-next" class="modal-next btn">Next</button>
+            <button type="button" id="modal-prev" class="modal-prev btn"><< Prev</button>
+            <button type="button" id="modal-next" class="modal-next btn">Next >></button>
         </div>
     </div>`
     
@@ -117,6 +112,7 @@ async function getUsers (url) {
 getUsers(url)
     .then(data => data.forEach(user => { generateCard(user),usersArr.push(user) }))
     .then(appendListeners)
+    .catch( () => gallery.innerHTML += `<h3>There was an error with the request</h3>`)
 
 generateSearch()
 
@@ -135,7 +131,6 @@ function appendListeners (users) {
                 generateModal(users[i],i,users);
                 return 
             }
-
             generateModal(usersArr[i],i,usersArr)
         })
     }
@@ -143,6 +138,7 @@ function appendListeners (users) {
 
 //SEARCH FUNCTIONALITY
 const search = getById("search-input");
+const submit = getById("search-submit")
 
 function searchFn (search,users) {
 
@@ -166,7 +162,8 @@ function searchControl (query,users) {
 
         gallery.innerHTML = "";
         usersArr.forEach(user => generateCard(user))
-        return
+        appendListeners()
+        return false
     }
  
     //IF THE INPUT PROVIDED DIT NOT MATCH ANY FILTERED USERS.
@@ -174,21 +171,26 @@ function searchControl (query,users) {
     
         //CLEAN THE CURRENT LIST OF USERS TO INSERT A NOT FOUND MESSAGE.
         gallery.innerHTML = "";
-        gallery.textContent = "No matches were found :(";
-        return
+        gallery.innerHTML = "<h3>No matches were found :( </h3>";
+        return false
     }
 
     gallery.innerHTML = ""
     users.forEach(user => generateCard(user))
+
+    return true
 }
 
 search.addEventListener("keyup",() => {
 
     const filteredUsers = searchFn(search.value,usersArr)
-    searchControl(search.value,filteredUsers)
-    appendListeners(filteredUsers)
-    
+
+    if (searchControl(search.value,filteredUsers)) {
+        appendListeners(filteredUsers)
+    }
 });
+
+submit.addEventListener("click", e => e.preventDefault())
 
 
 
