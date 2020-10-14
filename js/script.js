@@ -74,6 +74,7 @@ function generateModal (user,userIndex,arr) {
     const next = getById("modal-next");
     const prev = getById("modal-prev");
 
+    // IF THE VALUE OF USER INDEX IS EQUAL TO ARR.LENGTH -1 SET NEXT.DISPLAY TO NONE ELSE TO BLOCK
     next.style.display = userIndex === arr.length - 1 ? "none":"block"
 
     next.addEventListener('click',() => {
@@ -130,12 +131,8 @@ function appendListeners (users) {
 
         usersCards[i].addEventListener("click", () => {
 
-            if (users) {
+            users ? generateModal(users[i],i,users) : generateModal(usersArr[i],i,usersArr)
 
-                generateModal(users[i],i,users);
-                return 
-            }
-            generateModal(usersArr[i],i,usersArr)
         })
     }
 }
@@ -152,10 +149,13 @@ function searchFn (search,users) {
 
        let userFullName = user.name.first.toLowerCase()+" "+ user.name.last.toLowerCase();
        
-       if ( search.length > 0 && userFullName.includes( search.toLowerCase().trim("") ) ) {
-           filteredUsers.push(user);
+        if (search.length > 0 && userFullName.includes( search.toLowerCase().trim("") )) {
+
+           filteredUsers.push(user)
         }
+
     }
+
     return filteredUsers;
 }
  
@@ -189,9 +189,7 @@ search.addEventListener("keyup",() => {
 
     const filteredUsers = searchFn(search.value,usersArr)
 
-    if (searchControl(search.value,filteredUsers)) {
-        appendListeners(filteredUsers)
-    }
+    searchControl(search.value,filteredUsers) ? appendListeners(filteredUsers) : null
 });
 
 submit.addEventListener("click", e => e.preventDefault())
