@@ -180,7 +180,7 @@ function searchControl (query,users) {
     }
 
     gallery.innerHTML = ""
-    users.forEach(user => generateCard(user))
+    users.forEach(generateCard)
 
     return true
 }
