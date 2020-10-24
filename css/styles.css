@@ -201,9 +201,9 @@ header h1 {
     text-transform: uppercase;
     color: #000;
     padding: 0.75em 1.5em;
-    border:1px solid #40cda9;
     transition: .4s ease-out;
-    background: radial-gradient(#fff,#01e5b8);
+    border: 2px solid #40cda9;
+    background: #fff;
     outline: none;
   }
   
@@ -249,7 +249,6 @@ header h1 {
 
     .card:hover {
         background: rgba(255, 255, 255, 1);
-        box-shadow: 3px 3px #01e5b8;
     }
 
     .card:hover .card-text {
