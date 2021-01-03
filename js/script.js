@@ -175,7 +175,7 @@ function searchControl (query,users) {
     
         //CLEAN THE CURRENT LIST OF USERS TO INSERT A NOT FOUND MESSAGE.
         gallery.innerHTML = "";
-        gallery.innerHTML = "<h3>No matches were found :( </h3>";
+        gallery.innerHTML = "<h3>No matchs were found :( </h3>";
         return false
     }
 
